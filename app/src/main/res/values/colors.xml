@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="dark">#FF122456</color>
+    <color name="darkSecondary">#FF123470</color>
+    <color name="dark_button">#FF122456</color>
+    <color name="light">#FF122456</color>
+    <color name="light_button">#FF122456</color>
+
+    <color name="default_dark_100" >#FF010409</color>
+    <color name="default_dark_200" >#FF0D1117</color>
+    <color name="default_dark_300" >#FF161B22</color>
+    <color name="default_dark_400" >#FF21262D</color>
+    <color name="default_dark_500" >#FF30363D</color>
+
+    <color name="default_Light_100">#FF03318C</color>
+    <color name="default_Light_200">#FF033E8C</color>
+    <color name="default_Light_300">#FF0455BF</color>
+    <color name="default_Light_400">#FF3B8FD9</color>
+    <color name="default_Light_500">#FFD9D3C7</color>
+
+    <color name="default_classic_100" >#FF001848</color>
+    <color name="default_classic_200" >#FF301860</color>
+    <color name="default_classic_300" >#FF483078</color>
+    <color name="default_classic_400" >#FF604878</color>
+    <color name="default_classic_500" >#FF906090</color>
+
+</resources>
