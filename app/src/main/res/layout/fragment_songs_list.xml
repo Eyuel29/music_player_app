@@ -11,6 +11,5 @@
             android:background="@color/dark"
             tools:listitem="@layout/song_card"
             android:scrollbars="vertical"
-            android:scrollbarStyle="insideOverlay"
-            />
+            android:scrollbarStyle="insideOverlay" />
 </FrameLayout>

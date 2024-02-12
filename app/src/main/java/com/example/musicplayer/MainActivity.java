@@ -24,7 +24,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 public class MainActivity extends AppCompatActivity implements SongGetter{
 
     private AppFragmentStateAdapter appFragmentStateAdapter;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter{
     private volatile boolean permissionGranted = false;
 
     private volatile List<AudioModel> allAudio = new LinkedList<>();
-    private final String[] Titles = {"Songs", "Albums", "Playlists", "Liked"};
+    private final String[] Titles = {"Songs", "Albums", "Playlists", "Artists"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +43,32 @@ public class MainActivity extends AppCompatActivity implements SongGetter{
     }
 
     public void startApp(){
-        checkPermission();
-        setAllAudio(readAudioExternalStorage(MainActivity.this));
-        initViewPager();
+        if(checkPermission()){
+            setAllAudio(readAudioExternalStorage(MainActivity.this));
+            initViewPager();
+        }else{
+            askPermission();
+        }
     }
 
-    public void checkPermission(){
-        if(ContextCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
+    public boolean checkPermission(){
+        boolean permission = ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        return permission;
+    }
+
+    public void askPermission(){
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         if(requestCode == 1){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this, "Permission granted!", Toast.LENGTH_SHORT).show();
+                startApp();
             }else{
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE} , 1);
             }
@@ -113,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements SongGetter{
             tab.setText(Titles[position]);
         }).attach();
     }
+
+
 
     public void setAllAudio(List<AudioModel> allAudio) {
         this.allAudio = allAudio;
