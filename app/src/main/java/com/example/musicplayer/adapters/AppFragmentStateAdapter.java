@@ -21,10 +21,12 @@ public class AppFragmentStateAdapter extends FragmentStateAdapter {
 
     private String[] titles;
     SongGetter songGetter;
+    private SelectionListener selectionListener;
 
-    public AppFragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, String[] titles) {
+    public AppFragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, String[] titles, SelectionListener selectionListener) {
         super(fragmentActivity);
         this.titles = titles;
+        this.selectionListener = selectionListener;
     }
 
     @NonNull
@@ -35,7 +37,7 @@ public class AppFragmentStateAdapter extends FragmentStateAdapter {
 
         switch(position){
             case 0:
-                return new SongsList(allSongsList);
+                return new SongsList(allSongsList, selectionListener);
             case 1:
                 return new AlbumsList();
             case 2:
@@ -43,7 +45,7 @@ public class AppFragmentStateAdapter extends FragmentStateAdapter {
             case 3:
                 return new LikedSongsList();
         }
-        return new SongsList(allSongsList);
+        return new SongsList(allSongsList, selectionListener);
     }
 
     @Override

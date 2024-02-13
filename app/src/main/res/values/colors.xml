@@ -19,16 +19,19 @@
     <color name="default_dark_400" >#FF21262D</color>
     <color name="default_dark_500" >#FF30363D</color>
 
-    <color name="default_Light_100">#FF03318C</color>
-    <color name="default_Light_200">#FF033E8C</color>
-    <color name="default_Light_300">#FF0455BF</color>
-    <color name="default_Light_400">#FF3B8FD9</color>
-    <color name="default_Light_500">#FFD9D3C7</color>
 
-    <color name="default_classic_100" >#FF001848</color>
-    <color name="default_classic_200" >#FF301860</color>
-    <color name="default_classic_300" >#FF483078</color>
-    <color name="default_classic_400" >#FF604878</color>
-    <color name="default_classic_500" >#FF906090</color>
+    <color name="default_Light_100">#FFF0F3FA</color>
+    <color name="default_Light_200">#FFD5DEEF</color>
+    <color name="default_Light_300">#FFB1C9EF</color>
+    <color name="default_Light_400">#FF8AAEE0</color>
+    <color name="default_Light_500">#FF628ECB</color>
+    <color name="default_Light_600">#FF395886</color>
+
+    <color name="default_classic_100" >#FF032030</color>
+    <color name="default_classic_200" >#FF022B42</color>
+    <color name="default_classic_300" >#FF003554</color>
+    <color name="default_classic_400" >#FF004D74</color>
+    <color name="default_classic_500" >#FF006494</color>
+    <color name="default_classic_600" >#FF006DA4</color>
 
 </resources>

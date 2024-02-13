@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="85dp"
     android:gravity="center_vertical"
-    android:background="?attr/colorPrimary"
     android:id="@+id/cardItem">
 
         <ImageView
@@ -13,7 +12,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/music_player"
+            android:layout_margin="5dp"
+            style="@style/songCoverImage"
             />
         <TextView
             android:layout_width="200dp"
@@ -22,26 +22,27 @@
             android:layout_toEndOf="@+id/songImage"
             android:singleLine="true"
             android:ellipsize="marquee"
-            android:textColor="?attr/colorOnPrimary"
             android:marqueeRepeatLimit="marquee_forever"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
             android:layout_alignParentTop="true"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:layout_marginStart="10dp"
+            style="@style/SongCardTitle"
             />
 
         <TextView
             android:id="@+id/songDuration"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:textColor="?attr/colorOnPrimary"
             android:layout_below="@+id/songTitle"
             android:layout_toEndOf="@+id/songImage"
             android:layout_marginStart="10dp"
             android:textSize="15sp"
-            android:gravity="center"/>
+            android:gravity="center"
+            style="@style/SongCardBody"/>
 
         <TextView
             android:id="@+id/songArtist"
@@ -49,7 +50,6 @@
             android:layout_height="30dp"
             android:textSize="15sp"
             android:layout_below="@+id/songTitle"
-            android:textColor="?attr/colorOnPrimary"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:focusable="true"
@@ -57,6 +57,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:layout_toEndOf="@+id/songDuration"
             android:layout_marginStart="10dp"
-            android:gravity="center"/>
-
+            android:gravity="center"
+            style="@style/SongCardBody"
+            />
 </RelativeLayout>

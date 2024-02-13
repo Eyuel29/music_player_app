@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.musicplayer.adapters.AppFragmentStateAdapter;
+import com.example.musicplayer.adapters.SelectionListener;
 import com.example.musicplayer.models.AudioModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -24,7 +26,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-public class MainActivity extends AppCompatActivity implements SongGetter{
+public class MainActivity extends AppCompatActivity implements SongGetter, SelectionListener {
 
     private AppFragmentStateAdapter appFragmentStateAdapter;
     private TabLayout tabLayout;
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter{
     public void initViewPager(){
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
-        appFragmentStateAdapter = new AppFragmentStateAdapter(this,Titles);
+        appFragmentStateAdapter = new AppFragmentStateAdapter(this,Titles,this);
         appFragmentStateAdapter.setSongGetter(this);
         viewPager.setAdapter(appFragmentStateAdapter);
 
@@ -119,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements SongGetter{
             tab.setText(Titles[position]);
         }).attach();
     }
-
-
 
     public void setAllAudio(List<AudioModel> allAudio) {
         this.allAudio = allAudio;
@@ -133,5 +133,16 @@ public class MainActivity extends AppCompatActivity implements SongGetter{
             return new ArrayList<AudioModel>();
 
         }else{ return this.allAudio; }
+    }
+
+    @Override
+    public void clicked(Intent intent) {
+
+        int position = intent.getIntExtra("POSITION",0);
+        intent.putExtra("PATH",allAudio.get(position).getSongPath());
+        intent.putExtra("ALBUM",allAudio.get(position).getAlbumName());
+        intent.putExtra("TITLE",allAudio.get(position).getSongTitle());
+        intent.putExtra("ARTIST",allAudio.get(position).getArtist());
+        startActivity(intent);
     }
 }

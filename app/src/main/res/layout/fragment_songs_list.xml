@@ -8,8 +8,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/songRecycler"
-            android:background="@color/dark"
             tools:listitem="@layout/song_card"
+            android:background="?attr/colorPrimary"
             android:scrollbars="vertical"
             android:scrollbarStyle="insideOverlay" />
 </FrameLayout>

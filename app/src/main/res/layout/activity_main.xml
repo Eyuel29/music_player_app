@@ -19,7 +19,7 @@
         android:layout_height="50dp"
         android:id="@+id/tabLayout"
         android:layout_alignParentBottom="true"
-        android:background="?attr/colorPrimary"
+        android:background="?attr/colorSecondary"
         app:tabIndicatorColor="@color/white"
         app:tabIndicatorAnimationMode="elastic"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
