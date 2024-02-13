@@ -1,4 +1,4 @@
-package com.example.musicplayer;
+package com.example.musicplayer.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.musicplayer.R;
 import com.example.musicplayer.adapters.AllSongsAdapter;
 import com.example.musicplayer.adapters.SelectionListener;
 import com.example.musicplayer.models.AudioModel;

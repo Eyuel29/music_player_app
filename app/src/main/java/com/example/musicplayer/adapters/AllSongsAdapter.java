@@ -14,11 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.musicplayer.FSMusicPlayerActivity;
+import com.example.musicplayer.activities.FSMusicPlayerActivity;
 import com.example.musicplayer.R;
 import com.example.musicplayer.models.AudioModel;
 
-import java.io.IOException;
 import java.util.List;
 
 public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHolder> {

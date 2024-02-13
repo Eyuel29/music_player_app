@@ -8,7 +8,7 @@
     android:layout_alignParentTop="false"
     android:background="?attr/colorPrimary"
     android:gravity="center_horizontal"
-    tools:context=".FSMusicPlayerActivity">
+    tools:context=".activities.FSMusicPlayerActivity">
 
     <ImageButton
         android:layout_width="30dp"

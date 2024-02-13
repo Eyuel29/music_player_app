@@ -1,4 +1,4 @@
-package com.example.musicplayer;
+package com.example.musicplayer.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.musicplayer.R;
 
 public class FSMusicPlayerActivity extends AppCompatActivity {
 

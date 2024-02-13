@@ -7,12 +7,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.musicplayer.AlbumsList;
-import com.example.musicplayer.LikedSongsList;
-import com.example.musicplayer.MainActivity;
-import com.example.musicplayer.Playlists;
+import com.example.musicplayer.fragments.AlbumsList;
+import com.example.musicplayer.fragments.LikedSongsList;
+import com.example.musicplayer.fragments.Playlists;
 import com.example.musicplayer.SongGetter;
-import com.example.musicplayer.SongsList;
+import com.example.musicplayer.fragments.SongsList;
 import com.example.musicplayer.models.AudioModel;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.musicplayer;
+package com.example.musicplayer.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.musicplayer.R;
+import com.example.musicplayer.SongGetter;
 import com.example.musicplayer.adapters.AppFragmentStateAdapter;
 import com.example.musicplayer.adapters.SelectionListener;
 import com.example.musicplayer.models.AudioModel;
