@@ -13,11 +13,11 @@
     <color name="light">#FF122456</color>
     <color name="light_button">#FF122456</color>
 
-    <color name="default_dark_100" >#FF010409</color>
-    <color name="default_dark_200" >#FF0D1117</color>
-    <color name="default_dark_300" >#FF161B22</color>
-    <color name="default_dark_400" >#FF21262D</color>
-    <color name="default_dark_500" >#FF30363D</color>
+    <color name="default_dark_100">#FF010409</color>
+    <color name="default_dark_200">#FF0D1117</color>
+    <color name="default_dark_300">#FF161B22</color>
+    <color name="default_dark_400">#FF21262D</color>
+    <color name="default_dark_500">#FF30363D</color>
 
 
     <color name="default_Light_100">#FFF0F3FA</color>
@@ -27,11 +27,16 @@
     <color name="default_Light_500">#FF628ECB</color>
     <color name="default_Light_600">#FF395886</color>
 
-    <color name="default_classic_100" >#FF032030</color>
-    <color name="default_classic_200" >#FF022B42</color>
-    <color name="default_classic_300" >#FF003554</color>
-    <color name="default_classic_400" >#FF004D74</color>
-    <color name="default_classic_500" >#FF006494</color>
-    <color name="default_classic_600" >#FF006DA4</color>
+    <color name="default_classic_100">#FF032030</color>
+    <color name="default_classic_200">#FF022B42</color>
+    <color name="default_classic_300">#FF003554</color>
+    <color name="default_classic_400">#FF004D74</color>
+    <color name="default_classic_500">#FF006494</color>
+    <color name="default_classic_600">#FF006DA4</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
 
 </resources>

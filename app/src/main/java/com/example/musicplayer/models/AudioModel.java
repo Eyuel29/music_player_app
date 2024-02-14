@@ -1,9 +1,11 @@
 package com.example.musicplayer.models;
 
-public class AudioModel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class AudioModel implements Parcelable {
     private String artist,songTitle, albumName, songPath;
     private int songDuration;
-
 
     public AudioModel() {
     }
@@ -54,5 +56,40 @@ public class AudioModel {
 
     public void setSongDuration(int songDuration) {
         this.songDuration = songDuration;
+    }
+
+
+    public static final Creator<AudioModel> CREATOR = new Creator<AudioModel>() {
+        @Override
+        public AudioModel createFromParcel(Parcel in) {
+            return new AudioModel(in);
+        }
+
+        @Override
+        public AudioModel[] newArray(int size) {
+            return new AudioModel[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    protected AudioModel(Parcel in) {
+        artist = in.readString();
+        songTitle = in.readString();
+        albumName = in.readString();
+        songPath = in.readString();
+        songDuration = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(artist);
+        parcel.writeString(albumName);
+        parcel.writeString(songTitle);
+        parcel.writeString(songPath);
+        parcel.writeString(String.valueOf(songDuration));
     }
 }

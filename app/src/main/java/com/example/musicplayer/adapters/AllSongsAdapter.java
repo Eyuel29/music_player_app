@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.BaseRequestOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.musicplayer.activities.FSMusicPlayerActivity;
 import com.example.musicplayer.R;
 import com.example.musicplayer.models.AudioModel;
@@ -47,8 +50,8 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
         int durationInSec = allAudio.get(position).getSongDuration();
         durationInSec /= 1000;
 
-        if (title.length() > 15){title= title.substring(0,15);}
-        if (artist.length() > 15){artist= artist.substring(0,15);}
+        if (title.length() > 25){title= title.substring(0,25)+"...";}
+        if (artist.length() > 15){artist= artist.substring(0,15)+"...";}
 
         holder.songArtist.setText(artist);
         holder.songDuration.setText(String.valueOf(convertDurationToMinutes(durationInSec)));
@@ -58,9 +61,12 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
         Log.i("COVER","COVER SIZE : " + ""+coverImage.length);
 
         if (coverImage != null){
+            RequestOptions requestOptions = new RequestOptions()
+                    .transform(new RoundedCorners(10));
             Glide.with(context)
                     .asBitmap()
                     .load(coverImage)
+                    .apply(requestOptions)
                     .into(holder.albumCover);
         }else{
             Glide.with(context)

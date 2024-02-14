@@ -1,10 +1,8 @@
 package com.example.musicplayer.fragments;
 
-import android.graphics.Color;
+
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,22 +36,18 @@ public class SongsList extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View songsListView = inflater.inflate(R.layout.fragment_songs_list, container, false);
-
         AllSongsAdapter allSongsAdapter = new AllSongsAdapter(allSongs, requireContext());
         allSongsAdapter.setSelectionListener(selectionListener);
         RecyclerView songRecyclerView = songsListView.findViewById(R.id.songRecycler);
         MaterialDividerItemDecoration divider = new MaterialDividerItemDecoration(requireContext(), LinearLayout.VERTICAL);
-        divider.setDividerInsetStart(180);
         divider.setDividerColor(requireContext().getResources().getColor(R.color.default_dark_400));
         songRecyclerView.addItemDecoration(divider);
         songRecyclerView.setAdapter(allSongsAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         songRecyclerView.setLayoutManager(linearLayoutManager);
-
         return songsListView;
     }
 }

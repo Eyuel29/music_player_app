@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.example.musicplayer.SongGetter;
 import com.example.musicplayer.adapters.AppFragmentStateAdapter;
 import com.example.musicplayer.adapters.SelectionListener;
 import com.example.musicplayer.models.AudioModel;
+import com.example.musicplayer.models.MusicPlayer;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -33,10 +35,9 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     private AppFragmentStateAdapter appFragmentStateAdapter;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
-    private volatile boolean permissionGranted = false;
-
-    private volatile List<AudioModel> allAudio = new LinkedList<>();
+    private List<AudioModel> allAudio = new ArrayList<>();
     private final String[] Titles = {"Songs", "Albums", "Playlists", "Artists"};
+    private MusicPlayer musicPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         startApp();
+        musicPlayer = MusicPlayer.getInstance();
     }
 
     public void startApp(){
@@ -58,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     public boolean checkPermission(){
         boolean permission = ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-
         return permission;
     }
 
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
 
     public List<AudioModel> readAudioExternalStorage(Context context){
 
-        List<AudioModel> allAudio = new LinkedList<>();
+        List<AudioModel> allAudio = new ArrayList<>();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
@@ -139,12 +140,8 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
 
     @Override
     public void clicked(Intent intent) {
-
         int position = intent.getIntExtra("POSITION",0);
-        intent.putExtra("PATH",allAudio.get(position).getSongPath());
-        intent.putExtra("ALBUM",allAudio.get(position).getAlbumName());
-        intent.putExtra("TITLE",allAudio.get(position).getSongTitle());
-        intent.putExtra("ARTIST",allAudio.get(position).getArtist());
+        intent.putParcelableArrayListExtra("ALL_SONGS",(ArrayList<? extends Parcelable>) allAudio);
         startActivity(intent);
     }
 }
