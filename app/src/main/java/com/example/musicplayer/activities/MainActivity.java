@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
         if (this.allAudio == null){
             Log.i("READING_SONGS", "ERROR OCCURRED!");
             return new ArrayList<AudioModel>();
-
         }else{ return this.allAudio; }
     }
 
