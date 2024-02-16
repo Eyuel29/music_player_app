@@ -16,7 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicPlayer"
         tools:targetApi="31">
-        <service android:name=".services.AudioPlayerService"/>
+    <service
+        android:name=".services.AudioPlayerService"
+        android:foregroundServiceType="mediaPlayback"
+        android:exported="false"
+        />
         <activity
             android:name=".activities.BindingActivity"
             android:exported="false">

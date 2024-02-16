@@ -33,12 +33,11 @@ public class BindingActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             audioBinder = (AudioPlayerService.AudioBinder) iBinder;
             audioPlayerService = audioBinder.getService();
-            Log.i("SERVICE_JOEL", "onServiceConnected: ");
+            boundMessage.setText("Current number : "+ audioPlayerService.getRandomNumber());
             isBound = true;
         }
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.i("SERVICE_JOEL", "onServiceDisconnected: ");
             isBound = false;
         }
     };
@@ -53,8 +52,8 @@ public class BindingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                     if (isBound){
-                        int random = audioPlayerService.generateRandomNumber();
-                        boundMessage.setText("Random message : "+random);
+                        audioPlayerService.updateRandomNumber();
+                        boundMessage.setText("Current number : "+ audioPlayerService.getRandomNumber());
                     }else{
                         Toast.makeText(BindingActivity.this, "Service is not bound!", Toast.LENGTH_SHORT).show();
                     }
