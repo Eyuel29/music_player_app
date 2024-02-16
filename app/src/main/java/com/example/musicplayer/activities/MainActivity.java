@@ -7,12 +7,15 @@ import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -24,6 +27,7 @@ import com.example.musicplayer.adapters.AppFragmentStateAdapter;
 import com.example.musicplayer.adapters.SelectionListener;
 import com.example.musicplayer.models.AudioModel;
 import com.example.musicplayer.models.MusicPlayer;
+import com.example.musicplayer.services.AudioPlayerService;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     private List<AudioModel> allAudio = new ArrayList<>();
     private final String[] Titles = {"Songs", "Albums", "Playlists", "Artists"};
     private MusicPlayer musicPlayer;
+    private boolean isBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
         getSupportActionBar().hide();
         startApp();
         musicPlayer = MusicPlayer.getInstance();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     public void startApp(){
@@ -93,7 +103,12 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
             MediaStore.Audio.Media.DATA
         };
 
-        Cursor cursor = context.getContentResolver().query(uri,projection,null,null,null,null);
+        Cursor cursor = context.getContentResolver()
+                .query(uri,projection,
+                        null,
+                        null,
+                        null,
+                        null);
 
         if(cursor != null){
             while(cursor.moveToNext()){
@@ -102,14 +117,12 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
                 String artist = cursor.getString(2);
                 String duration = cursor.getString(3);
                 String data = cursor.getString(4);
-
                 AudioModel audioModel = new AudioModel(artist,title,album,data,Integer.valueOf(duration));
                 Log.i("AUDIO_EXTRACT",title +" "+ artist+" "+duration+" "+album);
                 allAudio.add(audioModel);
             }
             cursor.close();
         }
-
         return allAudio;
     }
 
@@ -119,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
         appFragmentStateAdapter = new AppFragmentStateAdapter(this,Titles,this);
         appFragmentStateAdapter.setSongGetter(this);
         viewPager.setAdapter(appFragmentStateAdapter);
-
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             tab.setText(Titles[position]);
         }).attach();
@@ -138,9 +150,21 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     }
 
     @Override
-    public void clicked(Intent intent) {
-        int position = intent.getIntExtra("POSITION",0);
-        intent.putParcelableArrayListExtra("ALL_SONGS",(ArrayList<? extends Parcelable>) allAudio);
-        startActivity(intent);
+    public void clicked(int position) {
+//            Intent intent = new Intent(MainActivity.this,FSMusicPlayerActivity.class);
+//            AudioModel model = allAudio.get(position);
+//            intent.putExtra("ALBUM",model.getAlbumName());
+//            intent.putExtra("ARTIST",model.getArtist());
+//            intent.putExtra("PATH",model.getSongPath());
+//            intent.putExtra("TITLE",model.getSongTitle());
+//            intent.putExtra("DURATION",model.getSongDuration());
+            Intent intent = new Intent(MainActivity.this,BindingActivity.class);
+            startActivity(intent);
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
     }
 }

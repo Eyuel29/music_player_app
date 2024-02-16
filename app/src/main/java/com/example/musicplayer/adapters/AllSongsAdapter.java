@@ -77,9 +77,7 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, FSMusicPlayerActivity.class);
-                intent.putExtra("POSITION",holder. getAdapterPosition());
-                selectionListener.clicked(intent);
+                selectionListener.clicked(position);
             }
         });
     }
