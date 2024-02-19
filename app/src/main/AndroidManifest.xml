@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -16,27 +19,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicPlayer"
         tools:targetApi="31">
-    <service
-        android:name=".services.AudioPlayerService"
-        android:foregroundServiceType="mediaPlayback"
-        android:exported="false"
-        />
         <activity
-            android:name=".activities.BindingActivity"
+            android:name=".activities.SongPlayerActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
 
-        <activity
-            android:name=".activities.FSMusicPlayerActivity"
+        <service
+            android:name=".services.AudioPlayerService"
             android:exported="false"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:foregroundServiceType="mediaPlayback" />
 
         <activity
             android:name=".activities.MainActivity"

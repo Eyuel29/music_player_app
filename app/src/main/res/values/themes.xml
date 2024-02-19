@@ -1,35 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.MusicPlayer" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/default_classic_100</item>
-        <item name="colorPrimaryVariant">@color/default_classic_200</item>
-        <item name="colorOnPrimary">@color/default_Light_200</item>
+        <item name="colorPrimary">@color/default_light_100</item>
+        <item name="colorPrimaryVariant">@color/default_light_200</item>
+        <item name="colorOnPrimary">@color/default_dark_100</item>
 
-        <item name="colorSecondary">@color/default_classic_200</item>
-        <item name="colorSecondaryVariant">@color/default_classic_400</item>
-        <item name="colorOnSecondary">@color/default_Light_200</item>
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/default_light_300</item>
+        <item name="colorSecondaryVariant">@color/default_light_400</item>
+        <item name="colorOnSecondary">@color/default_dark_300</item>
+
+        <item name="colorTertiary">@color/default_light_500</item>
+        <item name="colorOnTertiary">@color/default_dark_500</item>
+
+        <item name="android:statusBarColor">?attr/colorOnTertiary</item>
     </style>
-
-    <style name="SongCardBody">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-    </style>
-
-    <style name="SongCardTitle">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-    </style>
-
-    <style name="CustomCard">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="songCoverImage">
-        <item name="android:radius">5dp</item>
-    </style>
-
-    <style name="ThemeOverlay.MusicPlayer.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
-        <item name="fullscreenTextColor">@color/light_blue_A200</item>
-    </style>
-
 </resources>

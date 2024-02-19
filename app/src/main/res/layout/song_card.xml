@@ -6,19 +6,21 @@
     android:id="@+id/cardItem">
 
         <ImageView
+            android:id="@+id/songImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:id="@+id/songImage"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:layout_margin="5dp"
-            style="@style/songCoverImage"
-            />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp" />
         <TextView
             android:layout_width="200dp"
             android:layout_height="45dp"
             android:id="@+id/songTitle"
+            android:textColor="@color/textHead"
             android:layout_toEndOf="@+id/songImage"
             android:singleLine="true"
             android:ellipsize="marquee"
@@ -30,7 +32,6 @@
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:layout_marginStart="10dp"
-            style="@style/SongCardTitle"
             />
 
         <TextView
@@ -41,8 +42,7 @@
             android:layout_toEndOf="@+id/songImage"
             android:layout_marginStart="10dp"
             android:textSize="15sp"
-            android:gravity="center"
-            style="@style/SongCardBody"/>
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/songArtist"
@@ -58,6 +58,5 @@
             android:layout_toEndOf="@+id/songDuration"
             android:layout_marginStart="10dp"
             android:gravity="center"
-            style="@style/SongCardBody"
             />
 </RelativeLayout>

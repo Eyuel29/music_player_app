@@ -19,24 +19,19 @@
     <color name="default_dark_400">#FF21262D</color>
     <color name="default_dark_500">#FF30363D</color>
 
+    <color name="default_light_100">#FFEEEFFF</color>
+    <color name="default_light_200">#FFDDDEEE</color>
+    <color name="default_light_300">#FFCCCDDD</color>
+    <color name="default_light_400">#FFBBBCCC</color>
+    <color name="default_light_500">#FFAAABBB</color>
 
-    <color name="default_Light_100">#FFF0F3FA</color>
-    <color name="default_Light_200">#FFD5DEEF</color>
-    <color name="default_Light_300">#FFB1C9EF</color>
-    <color name="default_Light_400">#FF8AAEE0</color>
-    <color name="default_Light_500">#FF628ECB</color>
-    <color name="default_Light_600">#FF395886</color>
 
-    <color name="default_classic_100">#FF032030</color>
-    <color name="default_classic_200">#FF022B42</color>
-    <color name="default_classic_300">#FF003554</color>
-    <color name="default_classic_400">#FF004D74</color>
-    <color name="default_classic_500">#FF006494</color>
-    <color name="default_classic_600">#FF006DA4</color>
-    <color name="light_blue_600">#FF039BE5</color>
-    <color name="light_blue_900">#FF01579B</color>
-    <color name="light_blue_A200">#FF40C4FF</color>
-    <color name="light_blue_A400">#FF00B0FF</color>
-    <color name="black_overlay">#66000000</color>
+    <color name="controlIcons">?attr/colorOnPrimary</color>
+    <color name="toggleIconsOn">@android:color/holo_orange_dark</color>
+    <color name="toggleIconsOff">?attr/colorSecondary</color>
+    <color name="textHead">?attr/colorOnPrimary</color>
+    <color name="textBody">?attr/colorOnSecondary</color>
+    <color name="Liked">#FFFF3834</color>
+
 
 </resources>
