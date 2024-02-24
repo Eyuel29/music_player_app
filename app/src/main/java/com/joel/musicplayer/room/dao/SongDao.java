@@ -22,6 +22,9 @@ public interface SongDao {
     @Delete
     void deleteSong(Song song);
 
+    @Query("DELETE FROM songs WHERE songs.songId = :songId;")
+    void deleteSongWithId(String songId);
+
     @Query("SELECT * FROM songs;")
     LiveData<List<Song>> getAllSongs();
 
@@ -33,4 +36,10 @@ public interface SongDao {
 
     @Query("SELECT * FROM songs WHERE songs.isLiked = 1;")
     LiveData<List<Song>> getAllLikedSongs();
+
+    @Query("SELECT * FROM songs WHERE songs.isLiked = 1;")
+    List<Song> getAllLikedSongsList();
+
+    @Query("SELECT * FROM songs WHERE songs.songId = :songId;")
+    Song getAllLikedSongs(String songId);
 }

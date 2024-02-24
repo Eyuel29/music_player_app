@@ -48,6 +48,7 @@ public class RoomTest {
         setAndGetArtist();
         setAndGetAlbum();
         setAndGetSong();
+        setAndGetPlaylist();
     }
 
 
@@ -114,10 +115,21 @@ public class RoomTest {
                 4500
         );
 
+        Song song3 = new Song(
+                "OFTEN",
+                "TWXO",
+                "Often",
+                "BBTM",
+                "/BBTM/TWXO/thehills.mp3",
+                1,
+                4500
+        );
+
         songDao.addSong(song1);
         songDao.addSong(song2);
+        songDao.addSong(song3);
         List<Song> allSongs = songDao.getAllSongsAsList();
-        assertEquals(2,allSongs.size());
+        assertEquals(3,allSongs.size());
     }
 
     @Test
@@ -133,16 +145,29 @@ public class RoomTest {
         playlistDao.insertPlaylist(playlist1);
         playlistDao.createPlaylistSong(new SongPlaylistCR("DARKTIMES","RNB"));
         playlistDao.createPlaylistSong(new SongPlaylistCR("THEHILLS","RNB"));
+        playlistDao.createPlaylistSong(new SongPlaylistCR("OFTEN","RNB"));
         List<SongPlaylistCR> allRef = playlistDao.getAllPlaylistSongRef("RNB");
-        assertEquals(2 ,allRef.size());
+        assertEquals(3 ,allRef.size());
+
+//        Song song = songDao.getAllLikedSongs(allRef.get(0).getSongId());
+//        assertEquals(song.getSongId(),"DARKTIMES");
     }
 
 
     @Test
     public void deleteSong(){
+        songDao.deleteSongWithId("DARKTIMES");
+        songDao.deleteSongWithId("THEHILLS");
+        songDao.deleteSongWithId("OFTEN");
 
+        List<SongPlaylistCR> allRef = playlistDao.getAllPlaylistSongRef("RNB");
+        List<Song> allSong = songDao.getAllLikedSongsList();
+        List<Playlist> allPlaylist = playlistDao.getAllPlaylistsList();
+
+        assertEquals(0,allSong.size());
+        assertEquals(0,allRef.size());
+        assertEquals(1,allPlaylist.size());
     }
-
 
     @After
     public void tearDown(){
