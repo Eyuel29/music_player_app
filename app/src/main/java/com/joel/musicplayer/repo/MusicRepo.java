@@ -103,7 +103,7 @@ public class MusicRepo {
     public LiveData<List<Song>> getAllLikedSongs(){
         return songDao.getAllLikedSongs();
     }
-    public LiveData<List<Song>> getSongsInPlaylist(String playlistId){
-        return playlistDao.getSongsInPlaylist(playlistId);
-    }
+//    public LiveData<List<Song>> getSongsInPlaylist(String playlistId){
+//        return playlistDao.getAllPlaylistSongReference(playlistId);
+//    }
 }

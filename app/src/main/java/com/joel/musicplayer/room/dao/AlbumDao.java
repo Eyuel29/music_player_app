@@ -28,4 +28,7 @@ public interface AlbumDao {
 
     @Query("SELECT * FROM albums;")
     LiveData<List<Album>> getAllAlbums();
+
+    @Query("SELECT * FROM albums;")
+    List<Album> getAllAlbumsList();
 }

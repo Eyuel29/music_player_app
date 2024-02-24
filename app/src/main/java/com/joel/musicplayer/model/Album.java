@@ -17,12 +17,12 @@ import androidx.room.PrimaryKey;
 public class Album {
     @NonNull
     @PrimaryKey
-    private int albumId;
+    private String albumId;
     private String albumTitle;
     private String artistId;
     private String releaseDate;
 
-    public Album(int albumId, String albumTitle, String artistId, String releaseDate) {
+    public Album(String albumId, String albumTitle, String artistId, String releaseDate) {
         this.albumId = albumId;
         this.albumTitle = albumTitle;
         this.artistId = artistId;
@@ -31,7 +31,7 @@ public class Album {
 
     public Album() {}
 
-    public int getAlbumId() {
+    public String getAlbumId() {
         return albumId;
     }
 
@@ -47,7 +47,7 @@ public class Album {
         return releaseDate;
     }
 
-    public void setAlbumId(int albumId) {
+    public void setAlbumId(String albumId) {
         this.albumId = albumId;
     }
 

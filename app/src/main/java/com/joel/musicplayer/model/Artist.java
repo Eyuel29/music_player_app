@@ -6,14 +6,12 @@ import androidx.room.PrimaryKey;
 
 @Entity( tableName = "artists")
 public class Artist {
-    @NonNull
-    @PrimaryKey
-    private String artistId;
+    @NonNull @PrimaryKey private String artistId;
     private String artistName;
 
     public Artist() {}
 
-    public Artist(String artistId, String artistName) {
+    public Artist(@NonNull String artistId, String artistName) {
         this.artistId = artistId;
         this.artistName = artistName;
     }

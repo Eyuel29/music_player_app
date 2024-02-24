@@ -33,7 +33,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/textHead"
                 android:text="Song"
                 android:textStyle="bold"
                 android:layout_marginStart="30dp"

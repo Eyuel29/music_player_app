@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import com.joel.musicplayer.model.Playlist;
 import com.joel.musicplayer.model.Song;
+import com.joel.musicplayer.model.SongPlaylistCR;
 
 import java.util.List;
 @Dao
@@ -26,8 +27,12 @@ public interface PlaylistDao {
     @Delete
     void deletePlaylist(Playlist playlist);
 
-    @Query("SELECT * FROM songs " +
-            "INNER JOIN song_playlist ON songs.songId = song_playlist.songId " +
-            "WHERE song_playlist.playlistId = :playlistId")
-    LiveData<List<Song>> getSongsInPlaylist(String playlistId);
+    @Insert
+    void createPlaylistSong(SongPlaylistCR songPlaylistCR);
+
+    @Query("SELECT songs.songId, playlistId  from songs inner join song_playlist on songs.songId where song_playlist.playlistId = :playlistId;")
+    List<SongPlaylistCR> getAllPlaylistSongRef(String playlistId);
+
+    @Query("SELECT songs.songId, playlistId  from songs inner join song_playlist on songs.songId where song_playlist.playlistId = :playlistId;")
+    LiveData<List<SongPlaylistCR>> getAllPlaylistSongReference(String playlistId);
 }

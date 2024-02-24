@@ -25,6 +25,9 @@ public interface SongDao {
     @Query("SELECT * FROM songs;")
     LiveData<List<Song>> getAllSongs();
 
+    @Query("SELECT * FROM songs;")
+    List<Song> getAllSongsAsList();
+
     @Query("UPDATE songs SET isLiked = 1 WHERE songId = :songId;")
     void likeASong(String songId);
 
