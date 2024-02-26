@@ -1,12 +1,17 @@
 package com.joel.musicplayer.repo;
 
 import android.app.Application;
-
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
+
 import com.joel.musicplayer.model.Album;
 import com.joel.musicplayer.model.Playlist;
 import com.joel.musicplayer.model.Song;
+import com.joel.musicplayer.model.SongPlaylistCR;
 import com.joel.musicplayer.room.SongDatabase;
 import com.joel.musicplayer.room.dao.AlbumDao;
 import com.joel.musicplayer.room.dao.ArtistDao;
@@ -22,13 +27,13 @@ public class MusicRepo {
     private SongDao songDao;
 
     public MusicRepo(Application application) {
-
         SongDatabase db = SongDatabase.getDatabase(application);
         playlistDao = db.getPlaylistDao();
         artistDao = db.getArtistDao();
         albumDao = db.getAlbumDao();
         songDao = db.getSongDao();
     }
+
     @WorkerThread
     public void addAlbum(Album album){
         SongDatabase.databaseExecutor.execute(() ->{
@@ -47,24 +52,7 @@ public class MusicRepo {
             albumDao.updateAlbum(album);
         });
     }
-    @WorkerThread
-    public void insertPlaylist(Playlist playlist){
-        SongDatabase.databaseExecutor.execute(() ->{
-            playlistDao.insertPlaylist(playlist);
-        });
-    }
-    @WorkerThread
-    public void updatePlaylist(Playlist playlist){
-        SongDatabase.databaseExecutor.execute(() ->{
-            playlistDao.updatePlaylist(playlist);
-        });
-    }
-    @WorkerThread
-    public void deletePlaylist(Playlist playlist){
-        SongDatabase.databaseExecutor.execute(() ->{
-            playlistDao.deletePlaylist(playlist);
-        });
-    }
+
     @WorkerThread
     public void addSong(Song song){
         SongDatabase.databaseExecutor.execute(() ->{
@@ -83,6 +71,7 @@ public class MusicRepo {
             songDao.deleteSong(song);
         });
     }
+
     @WorkerThread
     public void likeASong(String songId){
         SongDatabase.databaseExecutor.execute(() ->{
@@ -90,7 +79,49 @@ public class MusicRepo {
         });
     }
 
+    @WorkerThread
+    void unlikeASong(String songId){
+        SongDatabase.databaseExecutor.execute(() ->{
+            songDao.unlikeASong(songId);
+        });
+    }
+
+    @WorkerThread
+    public void insertPlaylist(Playlist playlist){
+        SongDatabase.databaseExecutor.execute(() ->{
+            playlistDao.insertPlaylist(playlist);
+        });
+    }
+    @WorkerThread
+    public void updatePlaylist(Playlist playlist){
+        SongDatabase.databaseExecutor.execute(() ->{
+            playlistDao.updatePlaylist(playlist);
+        });
+    }
+    @WorkerThread
+    public void deletePlaylist(Playlist playlist){
+        SongDatabase.databaseExecutor.execute(() ->{
+            playlistDao.deletePlaylist(playlist);
+        });
+    }
+
+    @WorkerThread
+    void createPlaylistSong(SongPlaylistCR songPlaylistCR){
+        SongDatabase.databaseExecutor.execute(() ->{
+            playlistDao.createPlaylistSong(songPlaylistCR);
+        });
+    }
+    @WorkerThread
+    void removePlaylistSong(SongPlaylistCR songPlaylistCR){
+        SongDatabase.databaseExecutor.execute(() ->{
+            playlistDao.removePlaylistSong(songPlaylistCR);
+        });
+    }
+
+    public LiveData<List<Song>> getAllLikedSongs(){return songDao.getAllLikedSongs(); }
+    public LiveData<List<Song>> getRelatedSong(String songName){return songDao.getRelatedSong(songName); }
     public LiveData<List<Song>> getAllSongs(){ return  songDao.getAllSongs(); }
+    public LiveData<Song> getSong(String songId){ return songDao.getSong(songId); }
     public LiveData<List<Song>> getAllSongFromAlbum(String albumId){
         return albumDao.getAllSongFromAlbum(albumId);
     }
@@ -100,10 +131,9 @@ public class MusicRepo {
     public LiveData<List<Playlist>> getAllPlaylists(){
         return playlistDao.getAllPlaylists();
     }
-    public LiveData<List<Song>> getAllLikedSongs(){
-        return songDao.getAllLikedSongs();
+
+    public LiveData<List<SongPlaylistCR>> getAllPlaylistSongReference(String playlistId){
+        return  playlistDao.getAllPlaylistSongReference(playlistId);
     }
-//    public LiveData<List<Song>> getSongsInPlaylist(String playlistId){
-//        return playlistDao.getAllPlaylistSongReference(playlistId);
-//    }
+
 }

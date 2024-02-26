@@ -75,7 +75,8 @@ public class AudioPlayerService extends Service {
                     NotificationManager.IMPORTANCE_DEFAULT
             ));
         }
-            startForeground(NOTIFICATION_ID,notification);
+
+        startForeground(NOTIFICATION_ID,notification);
     }
 
     public Notification createNotification(){
@@ -89,42 +90,6 @@ public class AudioPlayerService extends Service {
 
         return notification;
     }
-
-
-    public List<AudioModel> readAudioExternalStorage(Context context){
-        List<AudioModel> allAudio = new ArrayList<>();
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {
-                MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.DURATION,
-                MediaStore.Audio.Media.DATA
-        };
-
-        Cursor cursor = context.getContentResolver()
-                .query(uri,projection,
-                        null,
-                        null,
-                        null,
-                        null);
-
-        if(cursor != null){
-            while(cursor.moveToNext()){
-                String album = cursor.getString(0);
-                String title = cursor.getString(1);
-                String artist = cursor.getString(2);
-                String duration = cursor.getString(3);
-                String data = cursor.getString(4);
-                AudioModel audioModel = new AudioModel(artist,title,album,data,Integer.valueOf(duration));
-                Log.i("AUDIO_EXTRACT",title +" "+ artist+" "+duration+" "+album);
-                allAudio.add(audioModel);
-            }
-            cursor.close();
-        }
-        return allAudio;
-    }
-
 
     @Override
     public void onDestroy() {

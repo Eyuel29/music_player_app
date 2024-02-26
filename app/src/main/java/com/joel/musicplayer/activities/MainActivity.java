@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,10 +19,15 @@ import android.widget.Toast;
 import com.joel.musicplayer.R;
 import com.joel.musicplayer.adapters.AppFragmentStateAdapter;
 import com.joel.musicplayer.adapters.SelectionListener;
+import com.joel.musicplayer.model.Album;
+import com.joel.musicplayer.model.Artist;
+import com.joel.musicplayer.model.Song;
 import com.joel.musicplayer.model.audio.AudioModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.joel.musicplayer.services.AudioReader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 public class MainActivity extends AppCompatActivity implements SongGetter, SelectionListener {
@@ -33,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     private final String[] Titles = {"Songs", "Albums", "Playlists", "Artists"};
     private String[] permissions;
     private Button click;
+    private AudioReader audioReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
         setContentView(R.layout.activity_main);
         if (getSupportActionBar() != null){getSupportActionBar().hide();}
         click = findViewById(R.id.click);
+        audioReader = new AudioReader(getApplicationContext());
         click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,9 +67,58 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     public void startApp(){
         if(checkAllPermissions(permissions)){
             initViewPager();
-
+//            readSongs();
+//              getAllAlbums();
+            readArtists();
         }else{
             askPermission();
+        }
+    }
+
+    public void readArtists(){
+        List<Artist> allArtist = null;
+        try {
+            allArtist = audioReader.getAllArtists();
+            for (Artist artist : allArtist) {
+                Log.i("ALL_ARTIST","Artist id : " + artist.getArtistId());
+                Log.i("ALL_ARTIST","Artist name : " + artist.getArtistName());
+                Log.i("ALL_ARTIST","--------------------------------------------------");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readSongs(){
+        List<Song> allSongz = null;
+        try {
+            allSongz = audioReader.readAllSongs();
+
+            for (Song song : allSongz) {
+                Log.i("ALL_SONG","song title : " + song.getTitle());
+                Log.i("ALL_SONG","song path : " + song.getPath());
+                Log.i("ALL_SONG","song id : " + song.getSongId());
+                Log.i("ALL_SONG","song artist id : " + song.getArtistId());
+                Log.i("ALL_SONG","song duration : " + song.getDuration());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAllAlbums(){
+        try {
+            List<Album> allAlbums = audioReader.readAlbums();
+            for (Album album: allAlbums) {
+                Log.i("ALBUMS", "Album id : "+album.getAlbumId());
+                Log.i("ALBUMS", "Album title : "+album.getAlbumTitle());
+                Log.i("ALBUMS", "Album date : "+album.getReleaseDate());
+                Log.i("ALBUMS", "Album artist id : "+album.getArtistId());
+                Log.i("ALBUMS", "-----------------------------------------------");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

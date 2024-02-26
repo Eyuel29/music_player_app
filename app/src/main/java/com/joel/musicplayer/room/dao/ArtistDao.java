@@ -1,6 +1,8 @@
 package com.joel.musicplayer.room.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -15,5 +17,8 @@ public interface ArtistDao {
     void createArtist(Artist artist);
 
     @Query("SELECT * from artists")
-    List<Artist> getArtistsList();
+    LiveData<List<Artist>> getArtistsList();
+
+    @Delete
+    void deleteArtist(Artist artist);
 }

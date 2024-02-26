@@ -28,18 +28,18 @@ public interface SongDao {
     @Query("SELECT * FROM songs;")
     LiveData<List<Song>> getAllSongs();
 
-    @Query("SELECT * FROM songs;")
-    List<Song> getAllSongsAsList();
-
     @Query("UPDATE songs SET isLiked = 1 WHERE songId = :songId;")
     void likeASong(String songId);
+
+    @Query("UPDATE songs SET isLiked = 0 WHERE songId = :songId;")
+    void unlikeASong(String songId);
 
     @Query("SELECT * FROM songs WHERE songs.isLiked = 1;")
     LiveData<List<Song>> getAllLikedSongs();
 
     @Query("SELECT * FROM songs WHERE songs.isLiked = 1;")
-    List<Song> getAllLikedSongsList();
+    LiveData<Song> getSong(String songId);
 
-    @Query("SELECT * FROM songs WHERE songs.songId = :songId;")
-    Song getAllLikedSongs(String songId);
+    @Query("SELECT * FROM songs WHERE songs.title like :songName;")
+    LiveData<List<Song>> getRelatedSong(String songName);
 }

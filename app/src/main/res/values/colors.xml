@@ -25,7 +25,7 @@
     <color name="default_light_400">#FFBBBCCC</color>
     <color name="default_light_500">#FFAAABBB</color>
 
-
+    <color name="primary">?attr/colorPrimary</color>
     <color name="controlIcons">?attr/colorOnPrimary</color>
     <color name="toggleIconsOn">@android:color/holo_orange_dark</color>
     <color name="toggleIconsOff">?attr/colorSecondary</color>

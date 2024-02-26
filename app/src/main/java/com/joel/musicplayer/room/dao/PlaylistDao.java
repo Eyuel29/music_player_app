@@ -32,9 +32,9 @@ public interface PlaylistDao {
     @Insert
     void createPlaylistSong(SongPlaylistCR songPlaylistCR);
 
-    @Query("SELECT songs.songId, song_playlist.playlistId FROM songs INNER JOIN song_playlist ON songs.songId = song_playlist.songId WHERE song_playlist.playlistId = :playlistId")
-            List<SongPlaylistCR> getAllPlaylistSongRef(String playlistId);
+    @Delete
+    void removePlaylistSong(SongPlaylistCR songPlaylistCR);
 
-    @Query("SELECT songs.songId, song_playlist.playlistId  from songs inner join song_playlist on songs.songId where song_playlist.playlistId = :playlistId;")
+    @Query("SELECT songs.songId, song_playlist.playlistId FROM songs INNER JOIN song_playlist ON songs.songId = song_playlist.songId WHERE song_playlist.playlistId = :playlistId;")
     LiveData<List<SongPlaylistCR>> getAllPlaylistSongReference(String playlistId);
 }

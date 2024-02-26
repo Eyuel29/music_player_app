@@ -30,5 +30,5 @@ public interface AlbumDao {
     LiveData<List<Album>> getAllAlbums();
 
     @Query("SELECT * FROM albums;")
-    List<Album> getAllAlbumsList();
+    LiveData<List<Album>> getAllAlbumsList();
 }

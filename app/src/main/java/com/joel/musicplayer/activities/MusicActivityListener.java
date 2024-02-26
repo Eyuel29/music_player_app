@@ -11,5 +11,4 @@ public interface MusicActivityListener {
     void playerReset();
     void playerCompleted();
     void playerError(MediaPlayer mediaPlayer, int i, int i1);
-
 }
