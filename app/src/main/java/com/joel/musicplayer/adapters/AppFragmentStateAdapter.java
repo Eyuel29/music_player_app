@@ -1,7 +1,6 @@
 package com.joel.musicplayer.adapters;
 
-import android.util.Log;
-
+import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -12,33 +11,27 @@ import com.joel.musicplayer.fragments.LikedSongsList;
 import com.joel.musicplayer.fragments.Playlists;
 import com.joel.musicplayer.activities.SongGetter;
 import com.joel.musicplayer.fragments.SongsList;
-import com.joel.musicplayer.model.audio.AudioModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AppFragmentStateAdapter extends FragmentStateAdapter {
 
-    private String[] titles;
-    SongGetter songGetter;
-    private SelectionListener selectionListener;
+    private final String[] titles;
+    private SongGetter songGetter;
+    private final SelectionListener selectionListener;
+    private final Application application;
 
-    public AppFragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, String[] titles, SelectionListener selectionListener) {
+    public AppFragmentStateAdapter(@NonNull FragmentActivity fragmentActivity, String[] titles, SelectionListener selectionListener, Application application) {
         super(fragmentActivity);
         this.titles = titles;
         this.selectionListener = selectionListener;
+        this.application = application;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-//        List<AudioModel> allSongsList = songGetter.getAllSongs();
-        List<AudioModel> allSongsList = new ArrayList<>();
-        Log.i("Obtained_Songs", "" + allSongsList.size());
-
         switch(position){
             case 0:
-                return new SongsList(allSongsList, selectionListener);
+                return new SongsList(selectionListener, application);
             case 1:
                 return new AlbumsList();
             case 2:
@@ -46,7 +39,7 @@ public class AppFragmentStateAdapter extends FragmentStateAdapter {
             case 3:
                 return new LikedSongsList();
         }
-        return new SongsList(allSongsList, selectionListener);
+        return new SongsList(selectionListener, application);
     }
 
     @Override

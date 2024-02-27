@@ -16,6 +16,9 @@ public interface SongDao {
     @Insert
     void addSong(Song song);
 
+    @Insert
+    void addAllSongs(List<Song> song);
+
     @Update
     void updateSong(Song song);
 
@@ -36,9 +39,6 @@ public interface SongDao {
 
     @Query("SELECT * FROM songs WHERE songs.isLiked = 1;")
     LiveData<List<Song>> getAllLikedSongs();
-
-    @Query("SELECT * FROM songs WHERE songs.isLiked = 1;")
-    LiveData<Song> getSong(String songId);
 
     @Query("SELECT * FROM songs WHERE songs.title like :songName;")
     LiveData<List<Song>> getRelatedSong(String songName);

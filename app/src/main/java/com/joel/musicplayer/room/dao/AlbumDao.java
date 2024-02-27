@@ -17,6 +17,9 @@ public interface AlbumDao {
     @Insert
     void addAlbum(Album album);
 
+    @Insert
+    void addAllAlbums(List<Album> allAlbums);
+
     @Delete
     void deleteAlbum(Album album);
 

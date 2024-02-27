@@ -64,12 +64,20 @@ public class AudioReader {
             MediaStore.Audio.Media.ARTIST_ID,
             MediaStore.Audio.Media.ARTIST,
         };
-
         Cursor cursor = context.getContentResolver().query(artistUrl,projection,null,null,null);
         if (cursor != null){
             while (cursor.moveToNext()){
-                Artist artist = new Artist(cursor.getString(0), cursor.getString(1) );
-                allArtist.add(artist);
+                Artist newArtist = new Artist(cursor.getString(0), cursor.getString(1) );
+                boolean repeated = false;
+
+                for (Artist artist: allArtist) {
+                    if (newArtist.getArtistId().equals(artist.getArtistId())){
+                        repeated = true;
+                    }
+                }
+                if (!repeated){
+                    allArtist.add(newArtist);
+                }
             }
             cursor.close();
         }
@@ -131,12 +139,22 @@ public class AudioReader {
         );
 
         while (cursor.moveToNext()){
-            allAlbums.add(new Album(
-                cursor.getString(0),
-                cursor.getString(1),
-                cursor.getString(2),
-                cursor.getString(3)
-            ));
+            Album newAlbum = new Album(
+                    cursor.getString(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3)
+            );
+
+            boolean repeated = false;
+            for (Album album: allAlbums) {
+                if (album.getAlbumId().equals(newAlbum.getAlbumId())){
+                    repeated = true;
+                }
+            }
+            if (!repeated){
+                allAlbums.add(newAlbum);
+            }
         }
 
         cursor.close();

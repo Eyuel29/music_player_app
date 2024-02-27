@@ -1,6 +1,8 @@
 package com.joel.musicplayer.repo;
 
 import android.app.Application;
+import android.util.Log;
+
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.room.Delete;
@@ -9,6 +11,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.joel.musicplayer.model.Album;
+import com.joel.musicplayer.model.Artist;
 import com.joel.musicplayer.model.Playlist;
 import com.joel.musicplayer.model.Song;
 import com.joel.musicplayer.model.SongPlaylistCR;
@@ -19,6 +22,8 @@ import com.joel.musicplayer.room.dao.PlaylistDao;
 import com.joel.musicplayer.room.dao.SongDao;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class MusicRepo {
     private PlaylistDao playlistDao;
@@ -35,17 +40,76 @@ public class MusicRepo {
     }
 
     @WorkerThread
+    public void addArtist(Artist artist){
+        SongDatabase.databaseExecutor.execute(() ->{
+            artistDao.createArtist(artist);
+        });
+    }
+
+    @WorkerThread
+    public void addAllArtists(List<Artist> allArtists){
+        try {
+            Future <?> taskAddAllArtists = SongDatabase.databaseExecutor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    artistDao.addAllArtists(allArtists);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Log.i("PROCESS_SONG","ADDING ARTIST....");
+                }
+
+            });
+            taskAddAllArtists.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @WorkerThread
+    public void deleteArtist(Artist artist){
+        SongDatabase.databaseExecutor.execute(() ->{
+            artistDao.deleteArtist(artist);
+        });
+    }
+
+    @WorkerThread
     public void addAlbum(Album album){
         SongDatabase.databaseExecutor.execute(() ->{
             albumDao.addAlbum(album);
         });
     }
+
+    @WorkerThread
+    public void addAllAlbums(List<Album> allAlbums){
+        try {
+        Future <?> taskAddAllAlbums = SongDatabase.databaseExecutor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("PROCESS_SONG","ADDING ALBUM....");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    albumDao.addAllAlbums(allAlbums);
+                }
+            });
+            taskAddAllAlbums.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @WorkerThread
     public void deleteAlbum(Album album){
         SongDatabase.databaseExecutor.execute(() ->{
             albumDao.deleteAlbum(album);
         });
     }
+
     @WorkerThread
     public void updateAlbum(Album album){
         SongDatabase.databaseExecutor.execute(() ->{
@@ -59,6 +123,28 @@ public class MusicRepo {
             songDao.addSong(song);
         });
     }
+
+    @WorkerThread
+    public void addAllSongs(List<Song> allSongs){
+        try {
+            Future <?> taskAddAllSongs = SongDatabase.databaseExecutor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("PROCESS_SONG","ADDING SONGS....");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    songDao.addAllSongs(allSongs);
+                }
+            });
+            taskAddAllSongs.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
     @WorkerThread
     public void updateSong(Song song){
         SongDatabase.databaseExecutor.execute(() ->{
@@ -80,7 +166,7 @@ public class MusicRepo {
     }
 
     @WorkerThread
-    void unlikeASong(String songId){
+    public void unlikeASong(String songId){
         SongDatabase.databaseExecutor.execute(() ->{
             songDao.unlikeASong(songId);
         });
@@ -121,17 +207,16 @@ public class MusicRepo {
     public LiveData<List<Song>> getAllLikedSongs(){return songDao.getAllLikedSongs(); }
     public LiveData<List<Song>> getRelatedSong(String songName){return songDao.getRelatedSong(songName); }
     public LiveData<List<Song>> getAllSongs(){ return  songDao.getAllSongs(); }
-    public LiveData<Song> getSong(String songId){ return songDao.getSong(songId); }
     public LiveData<List<Song>> getAllSongFromAlbum(String albumId){
         return albumDao.getAllSongFromAlbum(albumId);
     }
     public LiveData<List<Album>> getAllAlbums(){
         return albumDao.getAllAlbums();
     }
+    public LiveData<List<Artist>> getAllArtists(){ return artistDao.getArtistsList(); }
     public LiveData<List<Playlist>> getAllPlaylists(){
         return playlistDao.getAllPlaylists();
     }
-
     public LiveData<List<SongPlaylistCR>> getAllPlaylistSongReference(String playlistId){
         return  playlistDao.getAllPlaylistSongReference(playlistId);
     }

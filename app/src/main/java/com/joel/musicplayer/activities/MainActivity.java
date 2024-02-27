@@ -4,16 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.joel.musicplayer.R;
@@ -25,36 +22,33 @@ import com.joel.musicplayer.model.Song;
 import com.joel.musicplayer.model.audio.AudioModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.joel.musicplayer.repo.MusicRepo;
 import com.joel.musicplayer.services.AudioReader;
+import com.joel.musicplayer.viewmodel.SongsViewModel;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements SongGetter, SelectionListener {
 
     private AppFragmentStateAdapter appFragmentStateAdapter;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
-    private List<AudioModel> allAudio = new ArrayList<>();
     private final String[] Titles = {"Songs", "Albums", "Playlists", "Artists"};
     private String[] permissions;
-    private Button click;
     private AudioReader audioReader;
+    private MusicRepo musicRepo;
+    private SongsViewModel songsViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (getSupportActionBar() != null){getSupportActionBar().hide();}
-        click = findViewById(R.id.click);
+        musicRepo = new MusicRepo(this.getApplication());
         audioReader = new AudioReader(getApplicationContext());
-        click.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,SongPlayerActivity.class);
-                startActivity(intent);
-            }
-        });
+        songsViewModel = new ViewModelProvider(MainActivity.this).get(SongsViewModel.class);
         setPermission();
         startApp();
     }
@@ -66,65 +60,58 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
 
     public void startApp(){
         if(checkAllPermissions(permissions)){
+            updateDB();
             initViewPager();
-//            readSongs();
-//              getAllAlbums();
-            readArtists();
         }else{
             askPermission();
         }
     }
 
-    public void readArtists(){
-        List<Artist> allArtist = null;
+    public void readAllArtists(){
         try {
-            allArtist = audioReader.getAllArtists();
-            for (Artist artist : allArtist) {
-                Log.i("ALL_ARTIST","Artist id : " + artist.getArtistId());
-                Log.i("ALL_ARTIST","Artist name : " + artist.getArtistName());
-                Log.i("ALL_ARTIST","--------------------------------------------------");
+            List<Artist> allArtist = audioReader.getAllArtists();
+            if (allArtist != null){
+                musicRepo.addAllArtists(allArtist);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void readSongs(){
-        List<Song> allSongz = null;
+    public void readAllSongs(){
         try {
-            allSongz = audioReader.readAllSongs();
-
-            for (Song song : allSongz) {
-                Log.i("ALL_SONG","song title : " + song.getTitle());
-                Log.i("ALL_SONG","song path : " + song.getPath());
-                Log.i("ALL_SONG","song id : " + song.getSongId());
-                Log.i("ALL_SONG","song artist id : " + song.getArtistId());
-                Log.i("ALL_SONG","song duration : " + song.getDuration());
+            List<Song> allSongs = audioReader.readAllSongs();
+            if (allSongs != null){
+                musicRepo.addAllSongs(allSongs);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void getAllAlbums(){
+    public void readAllAlbums(){
         try {
             List<Album> allAlbums = audioReader.readAlbums();
-            for (Album album: allAlbums) {
-                Log.i("ALBUMS", "Album id : "+album.getAlbumId());
-                Log.i("ALBUMS", "Album title : "+album.getAlbumTitle());
-                Log.i("ALBUMS", "Album date : "+album.getReleaseDate());
-                Log.i("ALBUMS", "Album artist id : "+album.getArtistId());
-                Log.i("ALBUMS", "-----------------------------------------------");
+            if (allAlbums != null){
+                musicRepo.addAllAlbums(allAlbums);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateDB(){
+        songsViewModel.getAllSongs().observe(this, songs -> {
+            if (songs == null || songs.size() < 1){
+                readAllArtists();
+                readAllSongs();
+                readAllAlbums();
+            }
+        });
     }
 
     public boolean checkAllPermissions(String[] allPermissions){
         boolean permissionStatus = true;
-
         for (String permission : allPermissions) {
             if (!checkSinglePermission(permission)){
                 permissionStatus = false;
@@ -134,10 +121,9 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     }
 
     public boolean checkSinglePermission(String permission){
-        boolean permissionStatus = ContextCompat.checkSelfPermission(
+        return ContextCompat.checkSelfPermission(
                 getApplicationContext(),
                 permission) == PackageManager.PERMISSION_GRANTED;
-        return permissionStatus;
     }
 
     public void setPermission(){
@@ -153,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
             };
         }
     }
+
 
     public void askPermission(){
         ActivityCompat.requestPermissions(this, permissions,1);
@@ -178,22 +165,16 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     public void initViewPager(){
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
-        appFragmentStateAdapter = new AppFragmentStateAdapter(this,Titles,this);
+        appFragmentStateAdapter = new AppFragmentStateAdapter(this,Titles,this, this.getApplication());
         appFragmentStateAdapter.setSongGetter(this);
         viewPager.setAdapter(appFragmentStateAdapter);
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            tab.setText(Titles[position]);
-        }).attach();
-    }
-
-    public void setAllAudio(List<AudioModel> allAudio) {
-        this.allAudio = allAudio;
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(Titles[position])).attach();
     }
 
     @Override
     public List<AudioModel> getAllSongs() {
+//        TODO
         return null;
-//        Todo
     }
 
     @Override

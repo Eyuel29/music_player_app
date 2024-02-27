@@ -16,6 +16,9 @@ public interface ArtistDao {
     @Insert
     void createArtist(Artist artist);
 
+    @Insert
+    void addAllArtists(List<Artist> allArtists);
+
     @Query("SELECT * from artists")
     LiveData<List<Artist>> getArtistsList();
 

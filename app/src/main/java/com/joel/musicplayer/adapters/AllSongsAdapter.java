@@ -17,19 +17,24 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.joel.musicplayer.R;
-import com.joel.musicplayer.model.audio.AudioModel;
+import com.joel.musicplayer.model.Song;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHolder> {
 
-    private List<AudioModel> allAudio;
+    private List<Song> allSongs = new ArrayList<>();
     private Context context;
     private SelectionListener selectionListener;
 
-    public AllSongsAdapter(List<AudioModel> allAudio, Context context){
-        this.allAudio = allAudio;
+    public AllSongsAdapter(Context context){
         this.context = context;
+    }
+
+    public void updateIndex(List<Song> allSongs){
+        this.allSongs = allSongs;
+        this.notifyDataSetChanged();
     }
 
     @NonNull
@@ -42,10 +47,10 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
     @Override
     public void onBindViewHolder(@NonNull SongHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        String title = allAudio.get(holder.getAdapterPosition()).getSongTitle();
-        String artist = allAudio.get(holder.getAdapterPosition()).getArtist();
-        String path = allAudio.get(holder.getAdapterPosition()).getSongPath();
-        int durationInSec = allAudio.get(holder.getAdapterPosition()).getSongDuration();
+        String title = allSongs.get(position).getTitle();
+        String artist = allSongs.get(position).getArtistId();
+        String path = allSongs.get(position).getPath();
+        long durationInSec = allSongs.get(position).getDuration();
         durationInSec /= 1000;
 
         if (title.length() > 25){title= title.substring(0,25)+"...";}
@@ -80,16 +85,16 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
         });
     }
 
-    public String convertDurationToMinutes(int durationInSeconds) {
-        int minutes = durationInSeconds / 60;
-        int seconds = durationInSeconds % 60;
+    public String convertDurationToMinutes(long durationInSeconds) {
+        long minutes = durationInSeconds / 60;
+        long seconds = durationInSeconds % 60;
 
         return String.format("%d:%02d", minutes, seconds);
     }
 
     @Override
     public int getItemCount() {
-        return allAudio.size();
+        return allSongs.size();
     }
 
     public class SongHolder extends RecyclerView.ViewHolder {
