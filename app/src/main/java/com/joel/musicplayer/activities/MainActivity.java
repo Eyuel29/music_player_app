@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.joel.musicplayer.R;
@@ -104,8 +105,8 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
         songsViewModel.getAllSongs().observe(this, songs -> {
             if (songs == null || songs.size() < 1){
                 readAllArtists();
-                readAllSongs();
                 readAllAlbums();
+                readAllSongs();
             }
         });
     }
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     public boolean checkAllPermissions(String[] allPermissions){
         boolean permissionStatus = true;
         for (String permission : allPermissions) {
+            Log.i("PERMISSION_S",permission + " : "+checkSinglePermission(permission));
             if (!checkSinglePermission(permission)){
                 permissionStatus = false;
             }
@@ -122,15 +124,16 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
 
     public boolean checkSinglePermission(String permission){
         return ContextCompat.checkSelfPermission(
-                getApplicationContext(),
-                permission) == PackageManager.PERMISSION_GRANTED;
+                getApplicationContext(),permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     public void setPermission(){
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             this.permissions = new String[]{
                     Manifest.permission.READ_MEDIA_AUDIO,
-                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
             };
         }else{
             this.permissions = new String[]{
@@ -172,18 +175,18 @@ public class MainActivity extends AppCompatActivity implements SongGetter, Selec
     }
 
     @Override
-    public List<AudioModel> getAllSongs() {
-//        TODO
-        return null;
-    }
-
-    @Override
-    public void clicked(int position) {
-
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void clicked(Song song) {
+
+    }
+
+    @Override
+    public List<AudioModel> getAllSongs() {
+
+        return null;
     }
 }

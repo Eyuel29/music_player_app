@@ -1,9 +1,7 @@
 package com.joel.musicplayer.adapters;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +23,14 @@ import java.util.List;
 public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHolder> {
 
     private List<Song> allSongs = new ArrayList<>();
-    private Context context;
+    private final Context context;
     private SelectionListener selectionListener;
 
     public AllSongsAdapter(Context context){
         this.context = context;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void updateIndex(List<Song> allSongs){
         this.allSongs = allSongs;
         this.notifyDataSetChanged();
@@ -61,7 +60,6 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
         holder.songTitle.setText(title);
 
         byte[] coverImage = getSongCover(path);
-        Log.i("COVER","COVER SIZE : " + ""+coverImage.length);
 
         if (coverImage != null){
             RequestOptions requestOptions = new RequestOptions()
@@ -73,18 +71,16 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
                     .into(holder.albumCover);
         }else{
             Glide.with(context)
-                    .load(R.drawable.music_player)
+                    .load(R.drawable.playing_icon)
                     .into(holder.albumCover);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectionListener.clicked(position);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            selectionListener.clicked(allSongs.get(position));
         });
     }
 
+    @SuppressLint("DefaultLocale")
     public String convertDurationToMinutes(long durationInSeconds) {
         long minutes = durationInSeconds / 60;
         long seconds = durationInSeconds % 60;
@@ -117,15 +113,16 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
     }
 
     public byte[] getSongCover(String path){
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(path);
         byte[] data = null;
-        try {
-            data = mediaMetadataRetriever.getEmbeddedPicture();
-            mediaMetadataRetriever.release();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        MediaMetadataRetriever mediaMetadataRetriever;
+            try {
+                mediaMetadataRetriever = new MediaMetadataRetriever();
+                mediaMetadataRetriever.setDataSource(path);
+                data = mediaMetadataRetriever.getEmbeddedPicture();
+                mediaMetadataRetriever.release();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         return data;
     }
 }

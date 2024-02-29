@@ -53,14 +53,8 @@ public class MusicRepo {
                 @Override
                 public void run() {
                     artistDao.addAllArtists(allArtists);
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     Log.i("PROCESS_SONG","ADDING ARTIST....");
                 }
-
             });
             taskAddAllArtists.get();
         } catch (ExecutionException | InterruptedException e) {
@@ -89,11 +83,6 @@ public class MusicRepo {
                 @Override
                 public void run() {
                     Log.i("PROCESS_SONG","ADDING ALBUM....");
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     albumDao.addAllAlbums(allAlbums);
                 }
             });
@@ -131,11 +120,6 @@ public class MusicRepo {
                 @Override
                 public void run() {
                     Log.i("PROCESS_SONG","ADDING SONGS....");
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     songDao.addAllSongs(allSongs);
                 }
             });
