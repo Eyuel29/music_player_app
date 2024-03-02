@@ -23,6 +23,8 @@ public class SongsViewModel extends AndroidViewModel {
         likedSongs = musicRepo.getAllLikedSongs();
     }
 
+
+
     public void addSong(Song song){ musicRepo.addSong(song);}
     public void updateSong(Song song){ musicRepo.updateSong(song); }
     public void deleteSong(Song song){ musicRepo.deleteSong(song);}

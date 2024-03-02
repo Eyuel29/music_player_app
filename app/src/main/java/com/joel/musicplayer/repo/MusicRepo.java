@@ -20,6 +20,7 @@ import com.joel.musicplayer.room.dao.AlbumDao;
 import com.joel.musicplayer.room.dao.ArtistDao;
 import com.joel.musicplayer.room.dao.PlaylistDao;
 import com.joel.musicplayer.room.dao.SongDao;
+import com.joel.musicplayer.utis.CustomLogger;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -190,12 +191,17 @@ public class MusicRepo {
 
     public LiveData<List<Song>> getAllLikedSongs(){return songDao.getAllLikedSongs(); }
     public LiveData<List<Song>> getRelatedSong(String songName){return songDao.getRelatedSong(songName); }
-    public LiveData<List<Song>> getAllSongs(){ return  songDao.getAllSongs(); }
+    public LiveData<List<Song>> getAllSongs(){
+            return songDao.getAllSongs();
+    }
     public LiveData<List<Song>> getAllSongFromAlbum(String albumId){
         return albumDao.getAllSongFromAlbum(albumId);
     }
     public LiveData<List<Album>> getAllAlbums(){
         return albumDao.getAllAlbums();
+    }
+    public LiveData<Artist> getArtistsWithId(String albumId){
+        return artistDao.getArtistsWithId(albumId);
     }
     public LiveData<List<Artist>> getAllArtists(){ return artistDao.getArtistsList(); }
     public LiveData<List<Playlist>> getAllPlaylists(){

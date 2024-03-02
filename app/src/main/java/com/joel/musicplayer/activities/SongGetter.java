@@ -1,9 +1,9 @@
 package com.joel.musicplayer.activities;
 
-import com.joel.musicplayer.model.audio.AudioModel;
+import com.joel.musicplayer.model.Song;
 
 import java.util.List;
 
 public interface SongGetter {
-    List<AudioModel> getAllSongs();
+    List<Song> getAllSongs();
 }

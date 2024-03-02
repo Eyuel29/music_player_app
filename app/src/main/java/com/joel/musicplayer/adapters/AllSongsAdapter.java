@@ -1,5 +1,6 @@
 package com.joel.musicplayer.adapters;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.view.LayoutInflater;
@@ -9,13 +10,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.joel.musicplayer.R;
+import com.joel.musicplayer.activities.MainActivity;
+import com.joel.musicplayer.model.Artist;
 import com.joel.musicplayer.model.Song;
+import com.joel.musicplayer.room.SongDatabase;
+import com.joel.musicplayer.viewmodel.ArtistViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +30,30 @@ import java.util.List;
 public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHolder> {
 
     private List<Song> allSongs = new ArrayList<>();
+    private List<Artist> allArtists = new ArrayList<>();
+    private ArtistViewModel artistViewModel;
     private final Context context;
     private SelectionListener selectionListener;
+    private Activity activity;
 
-    public AllSongsAdapter(Context context){
+    public AllSongsAdapter(Context context, Activity activity){
         this.context = context;
+        artistViewModel = new ArtistViewModel(activity.getApplication());
+        this.activity = activity;
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void updateIndex(List<Song> allSongs){
+    public void updateSongs(List<Song> allSongs){
         this.allSongs = allSongs;
         this.notifyDataSetChanged();
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateArtist(List<Artist> allArtists){
+        this.allArtists = allArtists;
+        this.notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
@@ -46,16 +65,23 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
     @Override
     public void onBindViewHolder(@NonNull SongHolder holder, @SuppressLint("RecyclerView") int position) {
 
+        String artistId = allSongs.get(position).getArtistId();
         String title = allSongs.get(position).getTitle();
-        String artist = allSongs.get(position).getArtistId();
         String path = allSongs.get(position).getPath();
+        String artistName = "Unknown artist";
+        for (Artist artist : allArtists) {
+            if (artist.getArtistId().equals(artistId)){
+                artistName = artist.getArtistName();
+            }
+        }
+
         long durationInSec = allSongs.get(position).getDuration();
         durationInSec /= 1000;
 
         if (title.length() > 25){title= title.substring(0,25)+"...";}
-        if (artist.length() > 15){artist= artist.substring(0,15)+"...";}
+        if (artistName.length() > 15){artistName= artistName.substring(0,15)+"...";}
 
-        holder.songArtist.setText(artist);
+        holder.songArtist.setText(artistName);
         holder.songDuration.setText(String.valueOf(convertDurationToMinutes(durationInSec)));
         holder.songTitle.setText(title);
 
@@ -63,10 +89,11 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
 
         if (coverImage != null){
             RequestOptions requestOptions = new RequestOptions()
-                    .transform(new RoundedCorners(10));
+                    .transform(new RoundedCorners(5));
             Glide.with(context)
                     .asBitmap()
                     .load(coverImage)
+                    .override(70,70)
                     .apply(requestOptions)
                     .into(holder.albumCover);
         }else{
@@ -78,6 +105,7 @@ public class AllSongsAdapter extends RecyclerView.Adapter<AllSongsAdapter.SongHo
         holder.itemView.setOnClickListener(view -> {
             selectionListener.clicked(allSongs.get(position));
         });
+
     }
 
     @SuppressLint("DefaultLocale")

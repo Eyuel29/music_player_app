@@ -22,6 +22,9 @@ public interface ArtistDao {
     @Query("SELECT * from artists")
     LiveData<List<Artist>> getArtistsList();
 
+    @Query("SELECT * from artists WHERE artistId = :albumId;")
+    LiveData<Artist> getArtistsWithId(String albumId);
+
     @Delete
     void deleteArtist(Artist artist);
 }

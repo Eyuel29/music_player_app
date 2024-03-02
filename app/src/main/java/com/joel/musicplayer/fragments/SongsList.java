@@ -1,8 +1,6 @@
 package com.joel.musicplayer.fragments;
-
-
+import android.app.Activity;
 import android.app.Application;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,9 +17,10 @@ import android.widget.LinearLayout;
 import com.joel.musicplayer.R;
 import com.joel.musicplayer.adapters.AllSongsAdapter;
 import com.joel.musicplayer.adapters.SelectionListener;
+import com.joel.musicplayer.model.Artist;
 import com.joel.musicplayer.model.Song;
-import com.joel.musicplayer.model.audio.AudioModel;
 import com.google.android.material.divider.MaterialDividerItemDecoration;
+import com.joel.musicplayer.viewmodel.ArtistViewModel;
 import com.joel.musicplayer.viewmodel.SongsViewModel;
 
 import java.util.ArrayList;
@@ -32,33 +31,33 @@ public class SongsList extends Fragment {
     private List<Song> allSongs = new ArrayList<>();
     private SelectionListener selectionListener;
     private AllSongsAdapter allSongsAdapter;
+    private Activity activity;
     private SongsViewModel songsViewModel;
+    private ArtistViewModel artistViewModel;
 
-    public SongsList(SelectionListener selectionListener,@NonNull Application application) {
+    public SongsList(SelectionListener selectionListener, Activity activity) {
         this.selectionListener = selectionListener;
-        songsViewModel= new SongsViewModel(application);
+        songsViewModel= new SongsViewModel(activity.getApplication());
+        artistViewModel = new ArtistViewModel(activity.getApplication());
+        this.activity = activity;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        songsViewModel.getAllSongs().observe(requireActivity(), new Observer<List<Song>>() {
-            @Override
-            public void onChanged(List<Song> songs) {
-                allSongsAdapter.updateIndex(songs);
-            }
+        songsViewModel.getAllSongs().observe(requireActivity(), songs -> allSongsAdapter.updateSongs(songs));
+
+        artistViewModel.getAllArtists().observe(requireActivity(), artists -> {
+            allSongsAdapter.updateArtist(artists);
         });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View songsListView = inflater.inflate(R.layout.fragment_songs_list, container, false);
-        allSongsAdapter = new AllSongsAdapter(requireContext());
+        allSongsAdapter = new AllSongsAdapter(requireContext(),activity);
         allSongsAdapter.setSelectionListener(selectionListener);
         RecyclerView songRecyclerView = songsListView.findViewById(R.id.songRecycler);
-        MaterialDividerItemDecoration divider = new MaterialDividerItemDecoration(requireContext(), LinearLayout.VERTICAL);
-        divider.setDividerColor(getResources().getColor(R.color.divider));
-        songRecyclerView.addItemDecoration(divider);
         songRecyclerView.setAdapter(allSongsAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

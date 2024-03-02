@@ -17,6 +17,113 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:id="@+id/mini_player"
+        android:background="@color/colorPrimary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:id="@+id/songImageMini"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/songTitleMini"
+            android:layout_marginStart="5dp"
+            app:layout_constraintHorizontal_chainStyle="spread"/>
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:id="@+id/songTitleMini"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toEndOf="@+id/songImageMini"
+            app:layout_constraintTop_toTopOf="parent"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Song"
+            android:textColor="@color/colorTextHead"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:id="@+id/songArtistMini"
+            app:layout_constraintStart_toEndOf="@+id/songImageMini"
+            app:layout_constraintTop_toBottomOf="@+id/songTitleMini"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Unknown"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:layout_marginStart="10dp"
+            android:gravity="start"
+            />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="5dp"
+            android:id="@+id/buttonSkipPreMini"
+            app:layout_constraintStart_toEndOf="@+id/songTitleMini"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonPlayPauseMini"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/skip_prev" />
+
+        <ImageView
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:id="@+id/buttonPlayPauseMini"
+            android:layout_marginHorizontal="5dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonSkipPreMini"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSkipNextMini"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/pause" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="5dp"
+            android:id="@+id/buttonSkipNextMini"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonPlayPauseMini"
+            app:layout_constraintEnd_toStartOf="@+id/closeMiniPlayer"
+            android:src="@drawable/skip_next" />
+
+        <ImageButton
+            android:layout_width="55dp"
+            android:layout_height="75dp"
+            android:id="@+id/closeMiniPlayer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/buttonSkipNextMini"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/close" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
