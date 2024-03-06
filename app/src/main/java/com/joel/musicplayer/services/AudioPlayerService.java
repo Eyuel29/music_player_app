@@ -132,12 +132,12 @@ public class AudioPlayerService extends Service {
     }
 
     public void initializePlayer(String path){
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            try {
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         INITIALIZED = true;
         audioPlayerCallbackFullPlayer.playerStateChanged(AudioPlayerState.INITIALIZED);
         audioPlayerCallbackMiniPlayer.playerStateChanged(AudioPlayerState.INITIALIZED);
@@ -145,14 +145,14 @@ public class AudioPlayerService extends Service {
 
     public void prepare(){
         if (INITIALIZED){
-            audioPlayerCallbackFullPlayer.playerStateChanged(AudioPlayerState.PREPARED);
-            audioPlayerCallbackMiniPlayer.playerStateChanged(AudioPlayerState.PREPARED);
             mediaPlayer.prepareAsync();
             PREPARED = true;
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     play();
+                    audioPlayerCallbackFullPlayer.playerStateChanged(AudioPlayerState.PREPARED);
+                    audioPlayerCallbackMiniPlayer.playerStateChanged(AudioPlayerState.PREPARED);
                 }
             });
         }
@@ -164,12 +164,13 @@ public class AudioPlayerService extends Service {
             COMPLETED = false;
             STOPPED = false;
             PAUSED = false;
+            audioPlayerCallbackFullPlayer.playerStateChanged(AudioPlayerState.PLAYING);
+            audioPlayerCallbackMiniPlayer.playerStateChanged(AudioPlayerState.PLAYING);
         }
     }
 
     public void pause(){
         if (PREPARED && mediaPlayer.isPlaying()){
-            mediaPlayer.stop();
             mediaPlayer.pause();
             PAUSED = true;
             audioPlayerCallbackFullPlayer.playerStateChanged(AudioPlayerState.PAUSE);
@@ -189,21 +190,27 @@ public class AudioPlayerService extends Service {
 
     public void reset(){
         mediaPlayer.reset();
-        INITIALIZED = false;
         PREPARED = false;
+        INITIALIZED = false;
         PAUSED = false;
         COMPLETED = false;
         STOPPED = false;
     }
 
     @Override
-    public boolean onUnbind(Intent intent) {
-        return super.onUnbind(intent);
-    }
+    public boolean onUnbind(Intent intent) { return super.onUnbind(intent); }
+
+    public boolean isINITIALIZED() { return INITIALIZED; }
+    public boolean isSTOPPED() { return STOPPED; }
+    public boolean isPREPARED() { return PREPARED; }
+    public boolean isPAUSED() { return PAUSED; }
+    public boolean isCOMPLETED() { return COMPLETED; }
+    public boolean isPLAYING() { return mediaPlayer.isPlaying(); }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         stopForeground(true);
+        mediaPlayer.release();
     }
 }

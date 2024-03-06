@@ -4,8 +4,11 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardItem"
+    android:background="@color/colorPrimary"
     android:layout_margin="1dp"
     app:cardCornerRadius="0dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardElevation="4dp"
     >
         <RelativeLayout

@@ -13,21 +13,16 @@ import com.joel.musicplayer.R;
 public class ImageLoader {
     public static void loadSongImage(Context context, String path, ImageView view){
 
-        RequestOptions requestOptions = new RequestOptions()
-        .transform(new CenterCrop(),new RoundedCorners(30));
-
         byte[] data = getSongImageData(path);
         if (data != null){
             Glide.with(context)
                     .asBitmap()
                     .load(data)
-                    .apply(requestOptions)
                     .into(view);
         }else{
             Glide.with(context)
                     .asBitmap()
                     .load(R.drawable.music_player)
-                    .apply(requestOptions)
                     .into(view);
         }
     }

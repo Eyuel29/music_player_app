@@ -2,6 +2,7 @@ package com.joel.musicplayer.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,9 +16,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,16 +33,16 @@ import com.joel.musicplayer.repo.MusicRepo;
 import com.joel.musicplayer.services.AudioPlayerCallback;
 import com.joel.musicplayer.services.AudioPlayerService;
 import com.joel.musicplayer.services.AudioReader;
-import com.joel.musicplayer.utis.CustomLogger;
+import com.joel.musicplayer.utis.AudioPlayerState;
 import com.joel.musicplayer.utis.ImageLoader;
 import com.joel.musicplayer.viewmodel.SongsViewModel;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends
         AppCompatActivity implements
-        SongGetter,
         SelectionListener, AudioPlayerCallback {
     private AppFragmentStateAdapter appFragmentStateAdapter;
     private TabLayout tabLayout;
@@ -57,11 +56,11 @@ public class MainActivity extends
     private boolean serviceBound = false;
     private AudioPlayerService.AudioBinder audioBinder;
     private AudioPlayerService audioPlayerService;
-    private ImageView playPauseButton, skipNextButton, skipPrevButton, songCoverMini;
-    private ImageButton closeButton;
+    private ImageView playPauseButton, songCoverMini, closeButton;
     private TextView miniSongTitle, miniSongArtist;
     private byte[] songArtMini;
-    private View miniView;
+    private String playerState = AudioPlayerState.PAUSE;
+    private View miniView, miniViewController;
 
     private List<Song> allSongs;
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -90,22 +89,31 @@ public class MainActivity extends
         songsViewModel = new ViewModelProvider(MainActivity.this).get(SongsViewModel.class);
 
         playPauseButton = findViewById(R.id.buttonPlayPauseMini);
-        skipNextButton = findViewById(R.id.buttonSkipNextMini);
-        skipPrevButton = findViewById(R.id.buttonSkipPreMini);
         closeButton = findViewById(R.id.closeMiniPlayer);
 
         miniSongTitle = findViewById(R.id.songTitleMini);
         miniSongArtist = findViewById(R.id.songArtistMini);
         songCoverMini = findViewById(R.id.songImageMini);
         miniView = findViewById(R.id.mini_player);
+        miniViewController = findViewById(R.id.mini_player_controller);
+        miniViewController.setOnClickListener(view -> { });
         miniView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SongPlayerActivity.class);
             startActivity(intent);
         });
-        closeButton.setOnClickListener(view -> {
-            stopSong();
-        });
 
+        closeButton.setOnClickListener(view -> stopSong());
+
+        playPauseButton.setOnClickListener(view -> {
+            if (audioPlayerService.isPREPARED() && playerState.equals(AudioPlayerState.PAUSE)) {
+                continueSong();
+            }else if(audioPlayerService.isPREPARED() && playerState.equals(AudioPlayerState.PLAYING)){
+                pauseSong();
+            }else{
+                audioPlayerService.reset();
+                resetMiniView();
+            }
+        });
         setPermission();
         startApp();
     }
@@ -230,13 +238,6 @@ public class MainActivity extends
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(Titles[position])).attach();
     }
 
-    public void startSong(Song song){
-        ImageLoader.loadSongImage(this, song.getPath(), songCoverMini);
-        miniSongTitle.setText(song.getTitle());
-        miniSongArtist.setText(song.getArtistId());
-    }
-
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -244,24 +245,72 @@ public class MainActivity extends
 
     @Override
     public void clicked(Song song) {
+        startSong(song);
+    }
+
+    public void startSong(Song song){
         audioPlayerService.initializePlayer(song.getPath());
         audioPlayerService.prepare();
         miniView.setVisibility(View.VISIBLE);
-        startSong(song);
+        miniViewController.setVisibility(View.VISIBLE);
+        ImageLoader.loadSongImage(this, song.getPath(), songCoverMini);
+        miniSongTitle.setText(song.getTitle());
+        miniSongArtist.setText(song.getArtistId());
+    }
+
+    public void continueSong(){
+        audioPlayerService.play();
+    }
+
+    public void pauseSong(){
+        audioPlayerService.pause();
     }
 
     public void stopSong(){
         audioPlayerService.stop();
-        miniView.setVisibility(View.GONE);
     }
 
-    @Override
-    public List<Song> getAllSongs() {
-        return allSongs;
+    public void resetMiniView(){
+        miniSongArtist.setText("");
+        miniSongTitle.setText("");
+        songCoverMini.setImageDrawable(null);
+        miniView.setVisibility(View.GONE);
+        miniViewController.setVisibility(View.GONE);
     }
 
     @Override
     public void playerStateChanged(String newState) {
 
+        switch (newState){
+            case AudioPlayerState.COMPLETE:
+
+                Random random = new Random();
+                int randomIndex = random.nextInt(allSongs.size() -1);
+                startSong(allSongs.get(randomIndex));
+                break;
+
+            case AudioPlayerState.ERROR:
+                resetMiniView();
+                Toast.makeText(audioPlayerService, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                break;
+
+            case AudioPlayerState.PAUSE:
+                playPauseButton.setImageDrawable(AppCompatResources.
+                getDrawable(MainActivity.this,R.drawable.play));
+                playerState = AudioPlayerState.PAUSE;
+                break;
+
+            case AudioPlayerState.PLAYING:
+                playPauseButton.setImageDrawable(AppCompatResources.
+                getDrawable(MainActivity.this,R.drawable.pause));
+                playerState = AudioPlayerState.PLAYING;
+                break;
+
+            case AudioPlayerState.STOP:
+                resetMiniView();
+                break;
+            default:
+                break;
+        }
     }
 }

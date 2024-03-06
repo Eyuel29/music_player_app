@@ -47,8 +47,4 @@ public class AppFragmentStateAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return titles.length;
     }
-
-    public void setSongGetter(SongGetter songGetter) {
-        this.songGetter = songGetter;
-    }
 }
